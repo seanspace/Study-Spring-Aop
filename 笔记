@@ -1,0 +1,43 @@
+1.SpringAOP
+
+1). 加入jar包:比基本包多了4个jar
+com.springsource.net.sf.cglib-2.2.0.jar
+com.springsource.org.aopalliance-1.0.0.jar
+com.springsource.org.aspectj.weaver-1.6.8.RELEASE.jar
+commons-logging-1.1.1.jar
+spring-aop-4.0.0.RELEASE.jar
+spring-aspects-4.0.0.RELEASE.jar
+spring-beans-4.0.0.RELEASE.jar
+spring-context-4.0.0.RELEASE.jar
+spring-core-4.0.0.RELEASE.jar
+spring-expression-4.0.0.RELEASE.jar
+
+2). 在配置文件中加入aop的命名空间.
+
+3). 基于注解的方式
+①. 在配置文件中加入如下配置:
+<aop:aspectj-autoproxy></aop:aspectj-autoproxy>
+
+②. 把横切关注点的代码抽象到切面的类中.
+i. 切面首先是一个IOC中的bean,即加入@Component注解
+ii. 切面还需要加入一个@Aspect注解
+
+③. 在类中声明各种通知:
+
+i. 声明一个方法
+ii. 在方法前加入@Before注解:
+@Aspect
+@Component
+public class LoggingAspect {
+	
+	// 声明该方法是一个前置通知:在目标方法开始之前执行.
+	//@Before("execution(int com.bin.spring.aop.impl.ArithmeticCalculator.*(int,int))")
+	@Before("execution(int com.bin.spring.aop.impl.*.*(int,int))")
+	public void beforeMethod(JoinPoint joinPoint){
+		String methodName = joinPoint.getSignature().getName() ;
+		List<Object> args = Arrays.asList(joinPoint.getArgs()) ;
+		System.out.println("The Method begins " + methodName + args);
+	} 
+
+}
+
